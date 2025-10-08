@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Public Holidays Around the World</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- keep your stylesheet name (you had newholiday.css earlier) -->
+    <link rel="stylesheet" href="./proj.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <header class="header">
+          <h1 class="title">Public Holidays</h1>
+          <p class="subtitle">Discover holidays around the world</p>
+        </header>
+
+        <div class="country-section">
+          <label for="countrySelect" class="label">Select a Country:</label>
+          <select id="countrySelect" class="country-select">
+            <option value="">Choose a country...</option>
+            <option value="US">🇺🇸 United States</option>
+            <option value="GB">🇬🇧 United Kingdom</option>
+            <option value="IN">🇮🇳 India</option>
+            <option value="CA">🇨🇦 Canada</option>
+            <option value="AU">🇦🇺 Australia</option>
+            <option value="DE">🇩🇪 Germany</option>
+            <option value="FR">🇫🇷 France</option>
+            <option value="JP">🇯🇵 Japan</option>
+            <option value="BR">🇧🇷 Brazil</option>
+            <option value="MX">🇲🇽 Mexico</option>
+            <option value="IT">🇮🇹 Italy</option>
+            <option value="ES">🇪🇸 Spain</option>
+            <option value="NL">🇳🇱 Netherlands</option>
+            <option value="SE">🇸🇪 Sweden</option>
+            <option value="NO">🇳🇴 Norway</option>
+          </select>
+          <label for="countryInput" class="label" style="margin-top: 14px"
+            >Or enter Country Code (e.g., US, IN)</label
+          >
+          <input
+            id="countryInput"
+            type="text"
+            maxlength="2"
+            placeholder="Type country code (optional)"
+            style="
+              width: 100%;
+              padding: 12px;
+              border-radius: 12px;
+              border: 1px solid #e0e0e0;
+              margin-bottom: 12px;
+            "
+          />
+          <div
+            style="
+              display: flex;
+              gap: 12px;
+              margin-bottom: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <div style="flex: 1; min-width: 150px">
+              <label for="yearInput" class="label">Year</label>
+              <input
+                id="yearInput"
+                type="number"
+                min="1900"
+                max="2100"
+                style="
+                  width: 100%;
+                  padding: 12px;
+                  border-radius: 12px;
+                  border: 1px solid #e0e0e0;
+                "
+              />
+            </div>
+            <div style="flex: 1; min-width: 150px">
+              <label for="monthSelect" class="label">Month</label>
+              <select
+                id="monthSelect"
+                style="
+                  width: 100%;
+                  padding: 12px;
+                  border-radius: 12px;
+                  border: 1px solid #e0e0e0;
+                "
+              >
+                <option value="all">All months</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+          </div>
+          <div style="display: flex; gap: 12px; margin-top: 6px">
+            <button
+              id="fetchBtn"
+              class="footer-btn"
+              style="flex: 1; padding: 14px 20px"
+            >
+              Search Holidays
+            </button>
+            <button
+              id="clearCacheBtn"
+              class="footer-btn"
+              style="
+                flex: 0 0 160px;
+                background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+              "
+            >
+              Clear Cache
+            </button>
+          </div>
+        </div>
+
+        <div id="loading" class="loading hidden">
+          <div class="spinner"></div>
+          <p>Loading holidays...</p>
+        </div>
+
+        <div id="error" class="error hidden">
+          <p>Sorry, we couldn't load the holidays. Please try again.</p>
+        </div>
+
+        <div id="holidaysSection" class="holidays-section hidden">
+          <h2 class="section-title">Holidays</h2>
+          <div
+            id="resultsContainer"
+            class="table-container"
+            style="padding: 18px"
+          ></div>
+        </div>
+
+        <footer class="footer" style="margin-top: 18px">
+          <button id="helpBtn" class="footer-btn">❓ Help</button>
+          <button id="aboutBtn" class="footer-btn">ℹ️ About</button>
+        </footer>
+      </div>
+    </div>
+    <div id="helpModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>🔍 How to Use</h3>
+          <button class="close-btn" onclick="closeModal('helpModal')">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <strong>Step 1:</strong> Select a country from the dropdown or type
+            a 2-letter country code.
+          </p>
+          <p>
+            <strong>Step 2:</strong> Choose a year and optionally a month (or
+            "All months").
+          </p>
+          <p>
+            <strong>Step 3:</strong> Click "Search Holidays" to load results.
+            Holidays appear grouped by month as cards with details.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="aboutModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>🎊 About This App</h3>
+          <button class="close-btn" onclick="closeModal('aboutModal')">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            This app uses the Nager.Date public API to find holidays by country
+            and year.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="overlay" class="overlay hidden" onclick="closeAllModals()"></div>
+    <script src="./proj.js"></script>
+  </body>
+</html>

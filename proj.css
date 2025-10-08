@@ -1,0 +1,609 @@
+/* newholiday.css
+   Original styles (cleaned) + equal-height holiday-card overrides
+*/
+
+/* -----------------------------
+   Original / base styles
+   ----------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  /* layered background: gradient + image */
+  background: linear-gradient(
+      135deg,
+      rgba(255, 107, 107, 0.8) 0%,
+      rgba(255, 217, 61, 0.8) 25%,
+      rgba(107, 207, 126, 0.8) 50%,
+      rgba(77, 150, 255, 0.8) 75%,
+      rgba(155, 89, 182, 0.8) 100%
+    ),
+    url("https://images.pexels.com/photos/1303081/pexels-photo-1303081.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop");
+  background-size: cover, cover;
+  background-position: center, center;
+  background-attachment: fixed, scroll;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  line-height: 1.6;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(1px);
+  z-index: -1;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+  padding: 40px;
+  animation: fadeIn 0.8s ease-out;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ff6b6b, #4d96ff, #9b59b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #555;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.country-section {
+  margin-bottom: 30px;
+}
+
+.label {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.country-select {
+  width: 100%;
+  padding: 18px 24px;
+  font-size: 1.1rem;
+  border: 3px solid #e0e0e0;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.country-select:focus {
+  outline: none;
+  border-color: #4d96ff;
+  box-shadow: 0 0 0 4px rgba(77, 150, 255, 0.2);
+  background: rgba(255, 255, 255, 1);
+}
+
+.country-select:hover {
+  border-color: #4d96ff;
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-2px);
+}
+
+.loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f0f0f0;
+  border-top: 5px solid #4d96ff;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  text-align: center;
+  padding: 30px 20px;
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.1);
+  border-radius: 15px;
+  border: 2px solid rgba(231, 76, 60, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.holidays-section {
+  margin-bottom: 30px;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 25px;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.holidays-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+  font-size: 1rem;
+}
+
+.holidays-table thead {
+  background: linear-gradient(135deg, #4d96ff, #9b59b6);
+  color: white;
+}
+
+.holidays-table th {
+  padding: 20px 24px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.holidays-table tbody tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.holidays-table tbody tr:hover {
+  background: rgba(77, 150, 255, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(77, 150, 255, 0.2);
+}
+
+.holidays-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.holidays-table td {
+  padding: 18px 24px;
+  color: #333;
+  font-weight: 500;
+}
+
+.holidays-table .holiday-date {
+  font-weight: 600;
+  color: #4d96ff;
+  font-size: 1.05rem;
+}
+
+.holidays-table .holiday-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.holiday-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+  color: white;
+  text-decoration: none;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.holiday-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  background: linear-gradient(135deg, #ff5252, #ffcc02);
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding-top: 35px;
+  border-top: 3px solid rgba(0, 0, 0, 0.1);
+}
+
+.footer-btn {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 25px;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #6bcf7e, #4d96ff);
+  color: white;
+  box-shadow: 0 6px 20px rgba(77, 150, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footer-btn:hover {
+  background: linear-gradient(135deg, #51c56a, #3d7cff);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(77, 150, 255, 0.4);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  z-index: 999;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  width: 90%;
+  max-width: 550px;
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #4d96ff, #9b59b6);
+  color: white;
+  padding: 25px 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  padding: 35px;
+}
+
+.modal-body p {
+  margin-bottom: 18px;
+  color: #555;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.modal-body p:last-child {
+  margin-bottom: 0;
+}
+
+.modal-body strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.title::after {
+  content: "✨";
+  animation: sparkle 2s ease-in-out infinite;
+  margin-left: 10px;
+}
+
+/* responsive tweaks */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .card {
+    padding: 25px;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .country-select {
+    padding: 15px 20px;
+    font-size: 1rem;
+  }
+
+  .holidays-table th,
+  .holidays-table td {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .footer-btn {
+    padding: 12px 25px;
+    font-size: 0.9rem;
+  }
+
+  .modal {
+    width: 95%;
+  }
+
+  .modal-header {
+    padding: 20px 25px;
+  }
+
+  .modal-body {
+    padding: 25px;
+  }
+
+  .holiday-link {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* small fade-in-up animation used by rows */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* -----------------------------
+   Additive overrides for compact container & equal-height holiday cards
+   (non-invasive — preserves original design)
+   ----------------------------- */
+
+/* Make the primary centered card slightly smaller & a bit tighter */
+.container {
+  max-width: 760px;
+} /* slightly reduced from 800 */
+.card {
+  padding: 32px;
+} /* slightly reduced padding for a more compact look */
+
+/* Holiday card grid and equal-height cards */
+.month-body {
+  /* grid responsive and equal-height alignment */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  align-items: stretch; /* important for equal heights */
+}
+
+/* holiday-card: keep the original card look but ensure consistent sizing */
+.holiday-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%; /* stretch to same height as siblings */
+  padding: 14px;
+  border-radius: 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(172, 117, 117, 0.98),
+    rgba(242, 238, 238, 0.98)
+  );
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* subtle hover for cards */
+.holiday-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(2, 6, 23, 0.1);
+}
+
+/* title and meta spacing */
+.holiday-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.05rem;
+  line-height: 1.15;
+  color: #0f172a;
+}
+.holiday-card .h-meta {
+  font-size: 0.92rem;
+  color: #374151;
+  margin-top: 8px;
+}
+
+/* body expands so cards equalize */
+.holiday-card .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 auto; /* allow body to grow to equalize cards */
+}
+
+/* image area: fixed-height visual region for consistency */
+.holiday-card img {
+  width: 100%;
+  height: 160px; /* consistent image height */
+  object-fit: cover; /* crop to fit */
+  border-radius: 8px;
+  margin-top: 10px;
+  display: block;
+  background: #f3f4f6;
+}
+
+/* description paragraph limited to a few lines to keep uniform height */
+.holiday-card .h-desc {
+  color: #4b5563;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  margin-top: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* meta pills */
+.holiday-card .meta-pill {
+  display: inline-block;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+  font-size: 0.85rem;
+  color: #374151;
+  margin-right: 6px;
+}
+
+/* small responsive tweak: on very small screens drop image height to save space */
+@media (max-width: 420px) {
+  .holiday-card img {
+    height: 120px;
+  }
+  .container {
+    max-width: 95%;
+  }
+  .card {
+    padding: 22px;
+  }
+}
